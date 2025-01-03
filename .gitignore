@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 
 ##Databses
-./Databases/
+Databases/**
 ### STS ###
 .apt_generated
 .classpath
