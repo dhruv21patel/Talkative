@@ -44,6 +44,7 @@
 
 		<!-- Spring Security Drivers -->
 
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
@@ -63,8 +64,7 @@
 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
+			<artifactId>spring-security-web</artifactId>
 		</dependency>
 
 		<!-- Lombok boilerplate code driver-->
@@ -88,7 +88,17 @@
 			<version>5.2.0</version>
 		</dependency>
 
+		<!-- eureka client dependency-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+    		<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
 
+		<!-- LOAD Balancer -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
+		</dependency>
 
 		<!-- mongoose database drivers -->
 		<dependency>
@@ -118,6 +128,11 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.12.5</version>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.example.JWT</groupId>
+			<artifactId>Authentication</artifactId>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
 	</dependencies>

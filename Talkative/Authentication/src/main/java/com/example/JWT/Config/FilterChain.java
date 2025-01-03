@@ -45,8 +45,8 @@ public class FilterChain {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("./admin").hasRole("ADMIN")
-                        .requestMatchers("/Signup").anonymous()
-                        .requestMatchers("/Login").permitAll()
+                        .requestMatchers("/Auth/Signup").anonymous()
+                        .requestMatchers("/Auth/Login").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults()) //since we are not changing anything that's why with default static method can be called
                 .httpBasic(Customizer.withDefaults())

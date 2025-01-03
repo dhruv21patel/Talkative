@@ -26,6 +26,7 @@ import java.net.http.HttpResponse;
 import java.util.Date;
 
 @RestController
+@RequestMapping("/Auth")
 public class userlogin {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.example.JWT.Service.UserService;
 
+import com.example.JWT.Config.RestTemplateConfig;
 import com.example.JWT.DTOs.SignUpRequest;
 import com.example.JWT.DTOs.SigninRequest;
 import com.example.JWT.DTOs.UserServiceRequest;
@@ -43,7 +44,7 @@ public class UserAuthServiceImpl implements UserAuthService{
     private final RedisService redisService;
 
     @Autowired
-    private final RestTemplateBuilder restTemplateBuilder;
+    private final RestTemplate restTemplate;
 
     @Value("${user_Service_uri}")
     private String User_service_uri;
@@ -91,7 +92,6 @@ public class UserAuthServiceImpl implements UserAuthService{
             throw new UserAlreadyExistsException("USER ALREADY EXIST");
         }else{
 
-            RestTemplate restTemplate = restTemplateBuilder.rootUri(User_service_uri).setConnectTimeout(java.time.Duration.ofSeconds(3)).setReadTimeout(java.time.Duration.ofSeconds(3)).build();
             UserServiceRequest userServiceRequest = UserServiceRequest.builder().username(signUpRequest.getEmail()).passwordHash(signUpRequest.getPassword()).build();
             Boolean status = SendRESTRequest(restTemplate,userServiceRequest);
 
@@ -119,13 +119,19 @@ public class UserAuthServiceImpl implements UserAuthService{
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<UserServiceRequest> request = new HttpEntity<>(userServiceRequest, headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(
-                "/SaveUser",
+        String url = User_service_uri + "/User/SaveUser";
+        ResponseEntity<String> response = null;
+        try{
+             response = restTemplate.exchange(
+                url,
                 HttpMethod.POST,
                 request,
                 String.class
         );
+        }catch (Exception E)
+        {
+            throw new RuntimeException("Error ON URL or Request" + url);
+        }
         return response.getStatusCode().is2xxSuccessful();
 
     }

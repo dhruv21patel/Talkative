@@ -23,6 +23,12 @@
     </properties>
 
     <dependencies>
+        <!-- eureka client dependency-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+    		<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+
 
         <!-- Spring Boot Data JPA: Provides ORM support with Hibernate -->
         <dependency>
@@ -83,13 +89,6 @@
             <version>0.9.0</version>
         </dependency>
 
-        <!-- JUnit (Deprecated): Use JUnit 5 for modern testing frameworks -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 

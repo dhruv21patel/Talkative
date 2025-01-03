@@ -1,3 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-<properties/>
+server:
+  port: 8761
+
+spring:
+  application:
+    name: Discovery-Server
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+#  server:
+#    enable-self-preservation: true
+#    eviction-interval-timer-in-ms: 60000
+

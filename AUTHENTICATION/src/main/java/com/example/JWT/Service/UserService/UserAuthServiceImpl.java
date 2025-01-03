@@ -7,6 +7,7 @@ import com.example.JWT.Repository.UsersRepo;
 import com.example.JWT.Service.RedisService.RedisService;
 import com.example.JWT.exception.UserAlreadyExistsException;
 import jdk.jshell.spi.ExecutionControl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,19 +22,20 @@ import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserAuthServiceImpl implements UserAuthService{
 
     @Autowired
-    private  UsersRepo usersRepo;
+    private final UsersRepo usersRepo;
 
     @Autowired
-    private  AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    private  PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
     @Autowired
-    private  RedisService redisService;
+    private final RedisService redisService;
 
 //    @Autowired
 //    public UserAuthServiceImpl(UsersRepo usersRepo, AuthenticationManager authenticationManager, PasswordEncoder encoder, RedisService redisService) {
