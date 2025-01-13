@@ -93,12 +93,12 @@ public class UserAuthServiceImpl implements UserAuthService{
         }else{
 
             UserServiceRequest userServiceRequest = UserServiceRequest.builder().username(signUpRequest.getEmail()).passwordHash(signUpRequest.getPassword()).build();
-            Boolean status = SendRESTRequest(restTemplate,userServiceRequest);
-
-            if (!status)
-            {
-                throw new InternalError("UserServiceDown");
-            }
+//            Boolean status = SendRESTRequest(restTemplate,userServiceRequest);
+//
+//            if (!status)
+//            {
+//                throw new InternalError("UserServiceDown");
+//            }
             Users newuser = new Users();
             newuser.setFirstname(signUpRequest.getFirstname());
             newuser.setLastName(signUpRequest.getLastname());

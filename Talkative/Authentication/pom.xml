@@ -79,7 +79,6 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-redis</artifactId>
-			<version>3.4.0</version>
 		</dependency>
 
 		<dependency>
@@ -129,11 +128,12 @@
 			<version>0.12.5</version>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.example.JWT</groupId>
-			<artifactId>Authentication</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
+
+<!--		<dependency>-->
+<!--			<groupId>org.example.JWT</groupId>-->
+<!--			<artifactId>Authentication</artifactId>-->
+<!--			<version>1.0-SNAPSHOT</version>-->
+<!--		</dependency>-->
 
 	</dependencies>
     <build>

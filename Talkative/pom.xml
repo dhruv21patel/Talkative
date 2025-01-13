@@ -1,7 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
+<profiles>
+    <profile>
+        <id>Dev</id>
+    </profile>
+</profiles>
   <groupId>org.example</groupId>
   <artifactId>Talkative</artifactId>
   <version>1.0-SNAPSHOT</version>
@@ -11,22 +15,26 @@
   <url>http://maven.apache.org</url>
   <modules>
     <module>Authentication</module>
-    <module>UserService</module>
-    <module>MessagingService</module>
     <module>DiscoveryServer</module>
-      <module>Gateway</module>
+    <module>Gateway</module>
+    <module>ConnectionService</module>
   </modules>
 
   <parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
+		<version>3.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
   </parent>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spring-cloud.version>2023.0.3</spring-cloud.version>
+    <spring-cloud.version>2024.0.0</spring-cloud.version>
+    <grpc.version>1.69.0</grpc.version>
+    <protobuf-java.version>3.25.5</protobuf-java.version>
+    <spring-grpc.version>0.3.0-SNAPSHOT</spring-grpc.version>
+    <java.version>22</java.version> <!-- Explicitly define Java version -->
+    <netty.version>4.1.96.Final</netty.version>
   </properties>
 
   <dependencies>
@@ -40,13 +48,49 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-dependencies</artifactId>-->
+<!--            <version>3.1.4</version> &lt;!&ndash; Use the appropriate Spring Boot version &ndash;&gt;-->
+<!--            <type>pom</type>-->
+<!--            <scope>import</scope>-->
+<!--        </dependency>-->
+
+        <dependency>
+          <groupId>org.springframework.cloud</groupId>
+          <artifactId>spring-cloud-dependencies</artifactId>
+          <version>${spring-cloud.version}</version>
+          <type>pom</type>
+          <scope>import</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.96.Final</version> <!-- Secure version -->
+        </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-all</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+
+        <!-- Reactive WebFlux -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <version>3.4.0</version> <!-- Align with Spring Boot version -->
+        </dependency>
+
+        <!-- Reactive Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+            <version>3.4.0</version> <!-- Align with Spring Boot version -->
+        </dependency>
+
     </dependencies>
   </dependencyManagement>
 

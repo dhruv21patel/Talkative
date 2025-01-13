@@ -24,8 +24,8 @@ import java.util.Collections;
 public class Users implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long User_id;
 
     @Column(name = "first_name", nullable = false)
     private String firstname;
