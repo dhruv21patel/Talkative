@@ -1,5 +1,6 @@
 package org.example.ConnectionService.Service;
 
+import org.example.ConnectionService.DTO.ChatRoom;
 import org.example.ConnectionService.DTO.RequestConnection;
 import org.example.ConnectionService.Models.SessionTable;
 import org.example.ConnectionService.Repository.SessionTableMongoRepo;
@@ -20,7 +21,7 @@ public class ConnectionRoomService {
     @Autowired
     SessionTableMongoRepo mongorepo;
 
-    public Mono<String> CreateRoom(RequestConnection requestConnection)
+    public Mono<ChatRoom> CreateRoom(RequestConnection requestConnection)
     {
         return roomMapper.GenerateChatId(requestConnection)
                 .flatMap(Id -> roomMapper

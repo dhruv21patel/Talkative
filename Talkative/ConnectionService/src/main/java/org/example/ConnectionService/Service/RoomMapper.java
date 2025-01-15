@@ -1,5 +1,6 @@
 package org.example.ConnectionService.Service;
 
+import org.example.ConnectionService.DTO.ChatRoom;
 import org.example.ConnectionService.DTO.RequestConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
@@ -12,10 +13,10 @@ import java.util.UUID;
 public class RoomMapper {
 
   @Autowired
-ReactiveRedisTemplate<String, String> redisRoomTemplate;
+ReactiveRedisTemplate<String, ChatRoom> redisRoomTemplate;
 
-public Mono<Boolean> Save(String chatid, String roomid ) {
-    return redisRoomTemplate.opsForValue().set(chatid, roomid)
+public Mono<Boolean> Save(String chatid, ChatRoom room ) {
+    return redisRoomTemplate.opsForValue().set(chatid, room)
             .retry(3) // Retry Redis operation up to 3 times
             .flatMap(success -> {
                 if (success) {
@@ -30,9 +31,10 @@ public Mono<Boolean> Save(String chatid, String roomid ) {
                 return Mono.just(false);
             });
 }
-    public Mono<String> getRoomid(String Chatid)
+    public Mono<ChatRoom> getRoomid(String Chatid)
     {
-        return redisRoomTemplate.opsForValue().get(Chatid).switchIfEmpty(GenerateRoomId());
+        return redisRoomTemplate.opsForValue().get(Chatid).switchIfEmpty(
+                Mono.just(ChatRoom.builder().Chatid(Chatid).Roomid(GenerateRoomId()).build()));
     }
 
     public Mono<String> GenerateChatId(RequestConnection requestConnection)
@@ -47,10 +49,10 @@ public Mono<Boolean> Save(String chatid, String roomid ) {
         return  Mono.just(Math.min(sender,receiver)+"-"+Math.max(sender,receiver));
     }
 
-    private Mono<String> GenerateRoomId()
+    private String GenerateRoomId()
     {
         String roomid = UUID.randomUUID().toString();
-        return  Mono.just(roomid);
+        return  roomid;
     }
 
     public Mono<Boolean> deleteRoom(String chatid)

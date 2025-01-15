@@ -3,6 +3,7 @@ package org.example.ConnectionService.Config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.example.ConnectionService.DTO.ChatRoom;
 import org.example.ConnectionService.Models.SessionTable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,21 +19,23 @@ public class ReactiveRedisConfig {
 
 
     @Bean
-    public ReactiveRedisTemplate<String, String> redisRoomTemplate(ReactiveRedisConnectionFactory factory) {
+    public ReactiveRedisTemplate<String, ChatRoom> redisRoomTemplate(ReactiveRedisConnectionFactory factory) {
 
         StringRedisSerializer serializer = new StringRedisSerializer();
 
-        RedisSerializationContext.RedisSerializationContextBuilder<String, String> builder =
+        Jackson2JsonRedisSerializer<ChatRoom> ValueSerializer = new Jackson2JsonRedisSerializer<>(ChatRoom.class);
+
+        RedisSerializationContext.RedisSerializationContextBuilder<String, ChatRoom> builder =
                 RedisSerializationContext.newSerializationContext(serializer);
 
-        RedisSerializationContext<String, String> context = builder
+        RedisSerializationContext<String, ChatRoom> context = builder
                 .key(serializer) // Key serializer
-                .value(serializer) // Value serializer
+                .value(ValueSerializer) // Value serializer
                 .hashKey(serializer) // Hash key serializer
-                .hashValue(serializer) // Hash value serializer
+                .hashValue(ValueSerializer) // Hash value serializer
                 .build();
 
-        return new ReactiveRedisTemplate<String,String>(factory, context);
+        return new ReactiveRedisTemplate<String,ChatRoom>(factory, context);
     }
 
     @Bean

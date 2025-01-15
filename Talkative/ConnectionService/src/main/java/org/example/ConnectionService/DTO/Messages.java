@@ -24,4 +24,6 @@ public class Messages {
 
     @JsonProperty("Message")
     private String Message;
+
+    private String Chatid;
 }

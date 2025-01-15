@@ -25,7 +25,7 @@ public class ConnectoinController {
 
         return  connectionRoomService.CreateRoom(requestConnection).flatMap(
                 Room ->
-                        connectionRoomService.CreateUserSession( Room,requestConnection.getSender_id().toString() )
+                        connectionRoomService.CreateUserSession( Room.getRoomid(),requestConnection.getSender_id().toString() )
         );
     }
 

@@ -18,6 +18,7 @@
     <module>DiscoveryServer</module>
     <module>Gateway</module>
     <module>ConnectionService</module>
+    <module>InidividualMessageService</module>
   </modules>
 
   <parent>
