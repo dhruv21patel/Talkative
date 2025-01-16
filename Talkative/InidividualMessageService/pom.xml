@@ -37,35 +37,44 @@
 
 
         <!-- Databases and Cache -->
-<!--        <dependency>-->
-<!--          <groupId>org.postgresql</groupId>-->
-<!--          <artifactId>postgresql</artifactId>-->
-<!--          <scope>runtime</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--          <groupId>org.postgresql</groupId>-->
-<!--          <artifactId>r2dbc-postgresql</artifactId>-->
-<!--          <scope>runtime</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--          <groupId>org.springframework.boot</groupId>-->
-<!--          <artifactId>spring-boot-starter-data-r2dbc</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.4</version>
+        </dependency>
 
-<!--        <dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-jdbc</artifactId>-->
-<!--		</dependency>-->
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
 
+        <dependency>
+          <groupId>org.postgresql</groupId>
+          <artifactId>r2dbc-postgresql</artifactId>
+          <scope>runtime</scope>
+        </dependency>
 
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+        </dependency>
 
 
         <!-- Database migration Tool -->
-<!--        <dependency>-->
-<!--            <groupId>org.flywaydb</groupId>-->
-<!--            <artifactId>flyway-core</artifactId>-->
-<!--            <version>11.1.0</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>11.1.1</version>
+        </dependency>
+
+         <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>10.20.1</version>
+            <scope>runtime</scope>
+        </dependency>
+
 
 
         <!-- Apache Kafka Client Service  -->
