@@ -1,4 +1,4 @@
-package org.example.InidividualMessageService.Controller;
+package org.example.GroupMessageService.Controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;

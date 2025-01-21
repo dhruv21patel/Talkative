@@ -19,6 +19,7 @@
     <module>Gateway</module>
     <module>ConnectionService</module>
     <module>InidividualMessageService</module>
+      <module>GroupMessageService</module>
   </modules>
 
   <parent>

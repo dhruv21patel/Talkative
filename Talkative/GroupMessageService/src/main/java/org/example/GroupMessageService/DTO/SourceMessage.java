@@ -1,4 +1,4 @@
-package org.example.InidividualMessageService.DTO;
+package org.example.GroupMessageService.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

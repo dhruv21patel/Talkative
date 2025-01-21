@@ -1,4 +1,4 @@
-package org.example.InidividualMessageService.Models;
+package org.example.GroupMessageService.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 

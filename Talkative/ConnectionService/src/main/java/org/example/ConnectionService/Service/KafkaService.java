@@ -1,6 +1,8 @@
 package org.example.ConnectionService.Service;
 
-import org.springframework.context.annotation.Bean;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.ConnectionService.DTO.Messages;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
@@ -24,8 +26,10 @@ public class KafkaService {
         this.kafkaSender = KafkaSender.create(SenderOptions.create(kafkaconfigs));
     }
 
-    public Mono<Void> sendMessage(String topic,String Key, String message) {
-        SenderRecord<String, String, String> record = SenderRecord.create(topic, null, null, Key, message, null);
+    public Mono<Void> sendMessage(String topic,String Key, Messages message) throws JsonProcessingException {
+        ObjectMapper m = new ObjectMapper();
+        String jsonMessage = m.writeValueAsString(message);
+        SenderRecord<String, String, String> record = SenderRecord.create(topic, null, null, Key, jsonMessage, null);
 
          kafkaSender.send(Mono.just(record))
                 .doOnNext(result -> System.out.println("Message sent to topic: " + result.recordMetadata().topic()))
