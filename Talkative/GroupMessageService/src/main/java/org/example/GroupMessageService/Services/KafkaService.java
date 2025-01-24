@@ -4,44 +4,39 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.example.GroupMessageService.DTO.SourceMessage;
-import org.example.GroupMessageService.Models.Chats;
-import org.example.GroupMessageService.Models.Messages;
-import org.example.GroupMessageService.Repository.ChatRepo;
-import org.example.GroupMessageService.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
 
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
 public class KafkaService {
 
     private final ObjectMapper objectMapper;
-    private final MessageRepo messageRepo;
+    private final ChatService chatService;
     private final String server;
     private final String groupid;
     private final String offset;
     private final String keydeserializer;
     private final String valuedeserializer;
 
+
     @Autowired
     public KafkaService(
-            MessageRepo messageRepo, ChatRepo chatRepo, MemberRepo memberRepo,
+            ChatService chatService,
             @Value("${spring.kafka.consumer.bootstrap-servers}") String server,
             @Value("${spring.kafka.consumer.group-id}") String groupid,
             @Value("${spring.kafka.consumer.auto-offset-reset}") String offset,
             @Value("${spring.kafka.consumer.key-deserializer}") String keydeserializer,
             @Value("${spring.kafka.consumer.value-deserializer}") String valuedeserializer
     ) {
-        this.messageRepo = messageRepo;
+        this.chatService = chatService;
         this.server = server;
         this.groupid = groupid;
         this.offset = offset;
@@ -71,18 +66,13 @@ public class KafkaService {
             .subscribe(message -> {
                 try {
                     SourceMessage m = objectMapper.readValue(message.value(), SourceMessage.class);
-                    Messages newMessage = Messages.builder()
-                        .ChatID(m.getChatid())
-                        .SenderID(m.getSender_id())
-                        .Message(m.getMessage())
-                        .Seen(false)
-                        .build();
+                    System.out.println("Got the Message");
+                    chatService.getChatById(m.getChatid())
+                            .flatMap(Chat -> chatService.saveMessage(Chat.getChatId(),m.getSender_id(),m.getMessage()))
+                            .doOnSuccess(success -> System.out.println("success"))
+                            .onErrorContinue((e,i) -> System.out.println(e + " " + i));
+                    System.out.println("Saved The Message");
 
-                    messageRepo.save(newMessage)
-                        .flatMap(savedMessage -> messageRepo.findById(savedMessage.getMessageID()))
-                        .doOnSuccess(saved -> System.out.println("Saved Message: " + saved))
-                        .doOnError(Throwable::printStackTrace)
-                        .subscribe();
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }

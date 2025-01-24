@@ -1,30 +1,23 @@
 package org.example.GroupMessageService.Models;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
-@Table(name = "chats")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table("chats")
 public class Chats {
 
     @Id
-    @Column(name = "chatid", nullable = false, unique = true)
+    @Column("chatid")
     private String chatId;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Messages> messages;
-
-    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Members> members;
+    @Column("created_at")
+    private LocalDateTime createdAt;
 }
