@@ -8,13 +8,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "messages")  // ✅ Ensure lowercase table name
+@Table(name = "messages1")  // ✅ Ensure lowercase table name
 public class Messages {
 
     @Id
@@ -33,6 +34,7 @@ public class Messages {
     @Column("seen")
     private Boolean Seen;
 
-    @Column("send_time")
+    @Column("sendTime")
     private Timestamp Send_Time;
 }
+

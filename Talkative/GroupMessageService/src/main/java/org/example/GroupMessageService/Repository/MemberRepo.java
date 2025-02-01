@@ -12,8 +12,10 @@ import java.util.UUID;
 
 @EnableR2dbcRepositories
 public interface MemberRepo extends ReactiveCrudRepository<Members, UUID> {
-    @Query("INSERT INTO group_members (id, chatid, userid, role, joined_at) VALUES (:id, :chatId, :userId, :role, :joinedAt) RETURNING *")
-    Mono<Members> insertMember(UUID id, String chatId, Long userId, String role, LocalDateTime joinedAt);
+//    @Query("INSERT INTO group_members (id, chatid, userid, role, joined_at) VALUES (:id, :chatId, :userId, :role, :joinedAt) RETURNING *")
+//    Mono<Members> insertMember(UUID id, String chatId, Long userId, String role, LocalDateTime joinedAt);
 
     Flux<Members> findByChatId(String chatId);
+
+    Mono<Members> existsByuserId(String chatId,Long userId);
 }

@@ -7,6 +7,7 @@ import org.example.GroupMessageService.DTO.SourceMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
 
@@ -68,9 +69,13 @@ public class KafkaService {
                     SourceMessage m = objectMapper.readValue(message.value(), SourceMessage.class);
                     System.out.println("Got the Message");
                     chatService.getChatById(m.getChatid())
-                            .flatMap(Chat -> chatService.saveMessage(Chat.getChatId(),m.getSender_id(),m.getMessage()))
+                            .flatMap(Chat -> {
+                                System.out.println("Entered .... ");
+                                return chatService.saveMessage(Chat.getChatId(),m.getSender_id(),m.getMessage());
+                            })
                             .doOnSuccess(success -> System.out.println("success"))
-                            .onErrorContinue((e,i) -> System.out.println(e + " " + i));
+                            .onErrorContinue((e,i) -> System.out.println(e + " " + i))
+                            .subscribe();
                     System.out.println("Saved The Message");
 
                 } catch (JsonProcessingException e) {

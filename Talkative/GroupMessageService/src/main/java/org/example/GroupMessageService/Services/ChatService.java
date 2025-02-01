@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @Service
 public class ChatService {
@@ -58,8 +59,11 @@ public class ChatService {
      * Save a message in a chat
      */
     public Mono<Messages> saveMessage(String chatId, Long senderId, String messageText) {
-        Messages message = Messages.builder()
-                .messageId(UUID.randomUUID())
+    return chatRepo.findByChatId(chatId)// Ensure chat exists first
+        .switchIfEmpty(Mono.error(new RuntimeException("Chat ID does not exist.")))
+        .flatMap(chat -> {
+            Messages message = Messages.builder()
+                .messageId(null)  // Ensure new UUID
                 .chatId(chatId)
                 .senderId(senderId)
                 .message(messageText)
@@ -67,7 +71,9 @@ public class ChatService {
                 .sendTime(LocalDateTime.now())
                 .build();
 
-        return messagesRepository.save(message);
+            System.out.println("System Check: " + message.getMessageId());
+            return messagesRepository.save(message);
+        });
     }
 
     /**
@@ -80,7 +86,7 @@ public class ChatService {
     /**
      * Add a member to a chat
      */
-    public Mono<Members> addMember(String chatId, Long userId, String role) {
+    public Mono<String> addMember(String chatId, Long userId, String role) {
         if (chatId == null || chatId.isBlank()) {
         return Mono.error(new IllegalArgumentException("Chat ID cannot be null or empty"));
         }
@@ -89,17 +95,19 @@ public class ChatService {
             return Mono.error(new IllegalArgumentException("User ID cannot be null"));
         }
 
-        return membersRepository.existsById(UUID.randomUUID())  // ✅ Ensure no duplicate membership
-                .flatMap(exists -> {
-                    if (exists) {
-                        return Mono.error(new IllegalStateException("User is already a member of the chat."));
-                    }
+        return membersRepository.save(Members.builder()
+                                .id(null) // Ensure unique ID
+                                .chatId(chatId)
+                                .userId(userId) // ✅ Add userId here
+                                .role(role)
+                                .joinedAt(LocalDateTime.now())
+                                .build())
+                                .doOnSuccess(member -> System.out.println("Member added: " + member.getUserId()))
+                                .thenReturn("Member successfully added") // ✅ Return success message
+                                .doOnError(e -> {
+                                    System.out.println("User Already Exist");
+                                });
 
-                    UUID memberId = UUID.randomUUID();
-                    return membersRepository.insertMember(memberId, chatId, userId, role, LocalDateTime.now());
-                })
-                .doOnSuccess(member -> System.out.println("Member added: " + member.getUserId()))
-                .doOnError(Throwable::printStackTrace);
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.example.GroupMessageService.Controller;
 
+import org.example.GroupMessageService.DTO.AddMembersDTO;
 import org.example.GroupMessageService.DTO.CreateGroupDTO;
 import org.example.GroupMessageService.DTO.SourceMessage;
 import org.example.GroupMessageService.Services.ChatService;
@@ -34,5 +35,13 @@ public class ReceiverService {
                                                                  " and Creator ID: " + createGroupDTO.getCreatorId()))
                             .then(Mono.just("Group Created"));
 
+    }
+
+    @PostMapping(value = "/AddMembers")
+    public Mono<String> addMembers(@RequestBody AddMembersDTO addMembersDTO)
+    {
+        return Flux.fromIterable(addMembersDTO.getMembersList()) // Convert List to Flux
+            .flatMap(member -> chatService.addMember(addMembersDTO.getChatid(), member, "User")) // Call addMember for each user
+            .then(Mono.just("Members Added")); // ✅ Convert to Mono<String> after all operations complete
     }
 }
