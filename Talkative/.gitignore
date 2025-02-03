@@ -21,6 +21,12 @@ target/
 .springBeans
 .sts4-cache
 
+### project ###
+/Auth/
+/Chat/
+/Databases/
+/REDIS/
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
