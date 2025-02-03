@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Messages {
 
     @Id
-    @Column("messageid")  // ✅ Match PostgreSQL column name
+    @Column("messageid") // ✅ Match PostgreSQL column name
     private UUID MessageID;
 
     @Column("chatid")
@@ -35,6 +35,6 @@ public class Messages {
     private Boolean Seen;
 
     @Column("sendTime")
-    private Timestamp Send_Time;
+    private Timestamp SendTime;
 }
 

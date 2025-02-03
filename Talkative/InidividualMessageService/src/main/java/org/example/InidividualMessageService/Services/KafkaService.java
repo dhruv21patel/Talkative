@@ -52,14 +52,16 @@ public class KafkaService {
                 try {
                     SourceMessage m = objectMapper.readValue(Message.value(),SourceMessage.class);
                     Messages newMessage = Messages.builder()
-                        .ChatID(m.getChatid())
-                        .SenderID(m.getSender_id())
-                        .Message(m.getMessage())
-                        .Seen(false)  // ✅ Default false
-                        .build();
+                            .MessageID(UUID.randomUUID())  // Ensure it's a new UUID
+                            .ChatID(m.getChatid())
+                            .SenderID(m.getSender_id())
+                            .Message(m.getMessage())
+                            .Seen(false)
+                            .SendTime(Timestamp.valueOf(LocalDateTime.now()))  // ✅ Ensure it's set
+                            .build();
 
                     messageRepo.save(newMessage)
-                        .flatMap(savedMessage -> messageRepo.findById(savedMessage.getMessageID()))  // ✅ Fetch auto-generated fields
+//                        .flatMap(savedMessage -> messageRepo.findById(savedMessage.getMessageID()))  // ✅ Fetch auto-generated fields
                         .doOnSuccess(saved -> System.out.println("Saved Message: " + saved))
                         .doOnError(Throwable::printStackTrace)  // ✅ Debugging logs
                         .subscribe();

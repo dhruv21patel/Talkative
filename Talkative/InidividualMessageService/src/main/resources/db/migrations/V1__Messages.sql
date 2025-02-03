@@ -1,9 +1,10 @@
 
 CREATE TABLE IF NOT EXISTS messages1 (
-    chatid VARCHAR(255) PRIMARY KEY, -- ✅ Now `chatid` is the primary key
+    messageid UUID PRIMARY KEY,
+    chatid VARCHAR(255) NOT NULL,
     senderid BIGINT NOT NULL,
     message TEXT NOT NULL,
     seen BOOLEAN DEFAULT FALSE,
-    sendTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    sendTime TIMESTAMP NOT NULL  -- ✅ Use quotes if using camelCase
 );
 
