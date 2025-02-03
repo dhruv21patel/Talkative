@@ -26,6 +26,8 @@ target/
 /Chat/
 /Databases/
 /REDIS/
+/infra/
+/Talkative/
 
 ### NetBeans ###
 /nbproject/private/
