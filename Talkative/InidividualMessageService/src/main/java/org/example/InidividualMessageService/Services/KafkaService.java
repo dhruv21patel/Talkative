@@ -52,7 +52,7 @@ public class KafkaService {
                 try {
                     SourceMessage m = objectMapper.readValue(Message.value(),SourceMessage.class);
                     Messages newMessage = Messages.builder()
-                            .MessageID(UUID.randomUUID())  // Ensure it's a new UUID
+                            .MessageID(null)  // Ensure it's a new UUID
                             .ChatID(m.getChatid())
                             .SenderID(m.getSender_id())
                             .Message(m.getMessage())

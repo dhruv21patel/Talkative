@@ -1,5 +1,6 @@
 package org.example.InidividualMessageService.Controller;
 
+import org.example.InidividualMessageService.DTO.ResponseMessage;
 import org.example.InidividualMessageService.Models.Messages;
 import org.example.InidividualMessageService.Services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 public class ReceiverService {
@@ -16,9 +20,18 @@ public class ReceiverService {
     ChatService chatService;
 
     @GetMapping(value = "/{Chatid}",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Messages> Messages(@PathVariable  String Chatid)
+    public Mono<List<ResponseMessage>> Messages(@PathVariable  String Chatid)
     {
-        return chatService.getmessages(Chatid);
+
+        return chatService.getmessages(Chatid).map(M -> ResponseMessage
+                .builder()
+                .Message(M.getMessage())
+                .seen(M.getSeen())
+                .sender_id(M.getSenderID())
+                .Chatname(M.getChatID())
+                .sendtime(M.getSendTime())
+                .build()
+        ).doOnError(E-> System.out.println(E)).collectList();
     }
 
 }
