@@ -18,8 +18,8 @@
     <module>DiscoveryServer</module>
     <module>Gateway</module>
     <module>ConnectionService</module>
-    <module>InidividualMessageService</module>
-      <module>GroupMessageService</module>
+    <module>GroupMessageService</module>
+      <module>IndividualService</module>
   </modules>
 
   <parent>
