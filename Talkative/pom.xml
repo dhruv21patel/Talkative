@@ -19,7 +19,7 @@
     <module>Gateway</module>
     <module>ConnectionService</module>
     <module>GroupMessageService</module>
-      <module>IndividualService</module>
+    <module>IndividualService</module>
   </modules>
 
   <parent>
@@ -50,14 +50,6 @@
 
   <dependencyManagement>
     <dependencies>
-
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-dependencies</artifactId>-->
-<!--            <version>3.1.4</version> &lt;!&ndash; Use the appropriate Spring Boot version &ndash;&gt;-->
-<!--            <type>pom</type>-->
-<!--            <scope>import</scope>-->
-<!--        </dependency>-->
 
         <dependency>
           <groupId>org.springframework.cloud</groupId>

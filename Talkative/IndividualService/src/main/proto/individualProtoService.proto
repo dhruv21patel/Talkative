@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package org.example.IndividualService;
+
+option java_package = "org.example.IndividualService";
+option java_multiple_files = true;
+
+service IndividualMessageService {
+    rpc GetMessages (MessageRequest) returns (stream ResponseMessage);
+}
+
+message MessageRequest {
+    string chat_id = 1;
+}
+
+message ResponseMessage {
+    int64 sender_id = 1;
+    string chat_name = 2;
+    string message = 3;
+    bool seen = 4;
+    string send_time = 5;
+}
