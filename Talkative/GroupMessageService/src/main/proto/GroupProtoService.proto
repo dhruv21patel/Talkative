@@ -1,17 +1,17 @@
 syntax = "proto3";
 
-package org.example.IndividualService;
+package org.example.GroupMessageService;
 
-option java_package = "org.example.IndividualService";
+option java_package = "org.example.GroupMessageService";
 option java_multiple_files = true;
 
-service IndividualMessageService {
+service GroupMessageService {
     rpc GetMessages (MessageRequest) returns (stream ResponseMessage);
 
-    rpc GetIndividualMessages (MessageRequest) returns (stream ResponseMessage) {
-        option (google.api.http) = {
-            get: "/individual/{chat_id}"
-        };
+    rpc GetGroupMessages (GroupMessageRequest) returns (stream GroupResponseMessage) {
+        option (google.api.http) = { get: "/group/{chat_id}"};
+        }
+
     }
 }
 
