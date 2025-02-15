@@ -1,18 +1,14 @@
 syntax = "proto3";
 
 package org.example.IndividualService;
+import "google/protobuf/timestamp.proto";
 
 option java_package = "org.example.IndividualService";
 option java_multiple_files = true;
 
 service IndividualMessageService {
-    rpc GetMessages (MessageRequest) returns (stream ResponseMessage);
 
-    rpc GetIndividualMessages (MessageRequest) returns (stream ResponseMessage) {
-        option (google.api.http) = {
-            get: "/individual/{chat_id}"
-        };
-    }
+    rpc GetIndividualMessages (MessageRequest) returns (stream ResponseMessage);
 }
 
 message MessageRequest {
@@ -24,5 +20,5 @@ message ResponseMessage {
     string chat_name = 2;
     string message = 3;
     bool seen = 4;
-    string send_time = 5;
+    google.protobuf.Timestamp send_time = 5;
 }
