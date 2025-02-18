@@ -1,26 +1,28 @@
-package org.example.IndividualService.Services;
+package org.example.GroupMessageService.Services;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.example.IndividualService.IndividualMessageServiceGrpc;
-import org.example.IndividualService.MessageRequest;
-import org.example.IndividualService.ResponseMessage;
+import org.example.GroupMessageService.GroupMessageRequest;
+import org.example.GroupMessageService.GroupMessageServiceGrpc;
+import org.example.GroupMessageService.GroupResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.sql.Timestamp;
+
 @GrpcService
-public class grpcService extends IndividualMessageServiceGrpc.IndividualMessageServiceImplBase {
+public class grpcService extends GroupMessageServiceGrpc.GroupMessageServiceImplBase {
 
     @Autowired
     ChatService chatService;
     @Override
-    public void getIndividualMessages(MessageRequest request, StreamObserver<ResponseMessage> responseObserver) {
+    public void getGroupMessages(GroupMessageRequest request, StreamObserver<GroupResponseMessage> responseObserver) {
 
-        chatService.getmessages(request.getChatId()).map(M -> ResponseMessage.newBuilder()
+        chatService.getMessagesByChatId(request.getChatId()).map(M -> GroupResponseMessage.newBuilder()
                 .setMessage(M.getMessage())
                 .setSeen(M.getSeen())
-                .setSenderId(M.getSenderID())
-                .setChatName(M.getChatID())
-                .setSendTime(M.getSendTime())
+                .setSenderId(M.getSenderId())
+                .setChatName(M.getChatId())
+                .setSendTime(Timestamp.valueOf(M.getSendTime()))
                 .build()
         ).doOnError(e -> {
             System.out.println("Error while fetching messages: " + e.getMessage());

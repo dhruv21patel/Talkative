@@ -1,28 +1,24 @@
 syntax = "proto3";
 
 package org.example.GroupMessageService;
+import "google/protobuf/timestamp.proto";
 
 option java_package = "org.example.GroupMessageService";
 option java_multiple_files = true;
 
 service GroupMessageService {
-    rpc GetMessages (MessageRequest) returns (stream ResponseMessage);
+    rpc GetGroupMessages (GroupMessageRequest) returns (stream GroupResponseMessage);
 
-    rpc GetGroupMessages (GroupMessageRequest) returns (stream GroupResponseMessage) {
-        option (google.api.http) = { get: "/group/{chat_id}"};
-        }
-
-    }
 }
 
-message MessageRequest {
+message GroupMessageRequest {
     string chat_id = 1;
 }
 
-message ResponseMessage {
+message GroupResponseMessage {
     int64 sender_id = 1;
     string chat_name = 2;
     string message = 3;
     bool seen = 4;
-    string send_time = 5;
+    google.protobuf.Timestamp send_time = 5;
 }
