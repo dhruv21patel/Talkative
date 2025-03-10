@@ -1,13 +1,14 @@
 syntax = "proto3";
 
-package org.example.GroupMessageService;
+package org.example.ConnectionService;
 import "google/protobuf/timestamp.proto";
 
-option java_package = "org.example.GroupMessageService";
+option java_package = "org.example.ConnectionService";
 option java_multiple_files = true;
 
-service GroupMessageService {
+service ConnectionService {
     rpc GetGroupMessages (MessageRequest) returns (stream ResponseMessage);
+    rpc GetIndividualMessages (MessageRequest) returns (stream ResponseMessage);
 
 }
 
@@ -22,3 +23,4 @@ message ResponseMessage {
     bool seen = 4;
     google.protobuf.Timestamp send_time = 5;
 }
+

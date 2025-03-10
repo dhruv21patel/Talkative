@@ -2,9 +2,9 @@ package org.example.GroupMessageService.Services;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.example.GroupMessageService.GroupMessageRequest;
+import org.example.GroupMessageService.MessageRequest;
 import org.example.GroupMessageService.GroupMessageServiceGrpc;
-import org.example.GroupMessageService.GroupResponseMessage;
+import org.example.GroupMessageService.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
@@ -15,14 +15,14 @@ public class grpcService extends GroupMessageServiceGrpc.GroupMessageServiceImpl
     @Autowired
     ChatService chatService;
     @Override
-    public void getGroupMessages(GroupMessageRequest request, StreamObserver<GroupResponseMessage> responseObserver) {
+    public void getGroupMessages(MessageRequest request, StreamObserver<ResponseMessage> responseObserver) {
 
-        chatService.getMessagesByChatId(request.getChatId()).map(M -> GroupResponseMessage.newBuilder()
+        chatService.getMessagesByChatId(request.getChatId()).map(M -> ResponseMessage.newBuilder()
                 .setMessage(M.getMessage())
                 .setSeen(M.getSeen())
                 .setSenderId(M.getSenderId())
                 .setChatName(M.getChatId())
-                .setSendTime(Timestamp.valueOf(M.getSendTime()))
+                .setSendTime(TimestampConverter.toProtoTimestamp(Timestamp.valueOf(M.getSendTime())))
                 .build()
         ).doOnError(e -> {
             System.out.println("Error while fetching messages: " + e.getMessage());
@@ -37,4 +37,13 @@ public class grpcService extends GroupMessageServiceGrpc.GroupMessageServiceImpl
         );
 
     }
+
+    public static class TimestampConverter {
+    public static com.google.protobuf.Timestamp toProtoTimestamp(java.sql.Timestamp sqlTimestamp) {
+        return com.google.protobuf.Timestamp.newBuilder()
+                .setSeconds(sqlTimestamp.getTime() / 1000)  // Convert milliseconds to seconds
+                .setNanos((int) (sqlTimestamp.getTime() % 1000) * 1000000)  // Convert the remainder to nanos
+                .build();
+    }
+}
 }

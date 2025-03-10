@@ -1,14 +1,19 @@
 package org.example.ConnectionService.Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.protobuf.Descriptors;
 import org.example.ConnectionService.DTO.Messages;
 import org.example.ConnectionService.DTO.RequestConnection;
+import org.example.ConnectionService.ResponseMessage;
+import org.example.ConnectionService.Service.GrpcService;
 import org.example.ConnectionService.Service.MessageService;
 import org.example.ConnectionService.Service.RoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.management.Descriptor;
 import java.util.Objects;
 
 @RestController
@@ -20,6 +25,9 @@ public class MesaageController {
 
     @Autowired
     RoomMapper roomMapper;
+
+    @Autowired
+    GrpcService grpcService;
 
     @PostMapping("/{Roomid}")
     public Mono<String> SendMessage(@PathVariable String Roomid , @RequestBody Messages messages)
@@ -34,5 +42,16 @@ public class MesaageController {
             }
         });
 
+    }
+
+    @GetMapping("/{chatid}")
+    public Flux<ResponseMessage> getMessages(@PathVariable String chatid, @RequestBody RequestConnection requestConnection )
+    {
+        if(requestConnection.getIsGroup())
+        {
+            return grpcService.getIndivi(chatid);
+        }
+
+        return grpcService.getGroup(chatid);
     }
 }

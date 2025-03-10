@@ -12,6 +12,7 @@ public class grpcService extends IndividualMessageServiceGrpc.IndividualMessageS
 
     @Autowired
     ChatService chatService;
+
     @Override
     public void getIndividualMessages(MessageRequest request, StreamObserver<ResponseMessage> responseObserver) {
 
