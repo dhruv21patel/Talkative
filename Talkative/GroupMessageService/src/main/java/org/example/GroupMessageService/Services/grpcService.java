@@ -2,15 +2,15 @@ package org.example.GroupMessageService.Services;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.example.GroupMessageService.MessageRequest;
-import org.example.GroupMessageService.GroupMessageServiceGrpc;
-import org.example.GroupMessageService.ResponseMessage;
+import org.example.ConnectionService.ConnectionServiceGrpc;
+import org.example.ConnectionService.MessageRequest;
+import org.example.ConnectionService.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 
 @GrpcService
-public class grpcService extends GroupMessageServiceGrpc.GroupMessageServiceImplBase {
+public class grpcService extends ConnectionServiceGrpc.ConnectionServiceImplBase {
 
     @Autowired
     ChatService chatService;

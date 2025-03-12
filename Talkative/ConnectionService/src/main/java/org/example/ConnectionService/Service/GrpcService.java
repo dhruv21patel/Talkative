@@ -29,17 +29,20 @@ public class GrpcService {
                 .setChatId(chatId)
                 .build();
 
+        System.out.println("Making RPC Call");
+
         return Flux.create(emitter -> {
             asyncStub.getIndividualMessages(request, new StreamObserver<ResponseMessage>() {
                 @Override
                 public void onNext(ResponseMessage response) {
-                    logger.info("Received individual message: {}", response);
+                    logger.info("Received individual message: {}");
                     emitter.next(response); // Emit each message to Flux
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     logger.error("Error during gRPC call", t);
+                    t.printStackTrace();
                     emitter.error(t); // Handle errors
                 }
 

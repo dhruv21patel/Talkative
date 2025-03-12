@@ -25,6 +25,6 @@ public class MessageService {
             Topic = AllConstants.Topic;
         }
         kafkaService.sendMessage(Topic,Key,message);
-        return Mono.empty();
+        return Mono.just(message.getMessage());
     }
 }

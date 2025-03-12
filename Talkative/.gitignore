@@ -3,6 +3,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Node Packages ###
+package-lock.json
+package.json
+/node_modules
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml

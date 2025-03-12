@@ -6,6 +6,7 @@ import org.example.ConnectionService.Models.SessionTable;
 
 import org.example.ConnectionService.Service.ConnectionRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
