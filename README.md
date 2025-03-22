@@ -1,9 +1,9 @@
 # Talkative Project
 
 ![Java](https://img.shields.io/badge/Java-17-blue)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7-green)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-green)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-Deployment-blue)
-![Docker](https://img.shields.io/badge/Docker-Image%20Available-blue)
+![Docker](https://img.shields.io/badge/Docker-Image%20Available-pink)
 
 ## Introduction
 Talakative is a Java Spring Boot application built for scalable and efficient communication services. It leverages Kubernetes for seamless deployment and auto-scaling, ensuring high performance and fault tolerance. Designed with a fully microservices architecture, Talakative utilizes Spring Cloud Gateway for API routing and Netflix Eureka for service discovery. The application is optimized for performance with Project Reactor, improving API response times by over 92%, and Kafka enables efficient, event-driven communication between microservices.
