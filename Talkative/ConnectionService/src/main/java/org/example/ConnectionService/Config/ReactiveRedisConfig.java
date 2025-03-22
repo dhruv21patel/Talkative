@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.ConnectionService.DTO.ChatRoom;
+import org.example.ConnectionService.DTO.Messages;
 import org.example.ConnectionService.Models.SessionTable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,6 +61,24 @@ public class ReactiveRedisConfig {
                 .build();
 
         return new ReactiveRedisTemplate<String, SessionTable>(factory, context);
+    }
+
+    @Bean
+    public ReactiveRedisTemplate<String, Messages> redisMessageTemplate(ReactiveRedisConnectionFactory factory)
+    {
+        StringRedisSerializer keySerializer = new StringRedisSerializer();
+        Jackson2JsonRedisSerializer<Messages> serializer = new Jackson2JsonRedisSerializer<>(Messages.class);
+
+        RedisSerializationContext.RedisSerializationContextBuilder<String, Messages> builder =
+                RedisSerializationContext.newSerializationContext(keySerializer);
+
+        RedisSerializationContext<String,Messages> context =  builder.key(keySerializer)
+                .value(serializer)
+                .hashKey(keySerializer)
+                .hashValue(serializer)
+                .build();
+
+        return new ReactiveRedisTemplate<String,Messages>(factory, context);
     }
 
 }

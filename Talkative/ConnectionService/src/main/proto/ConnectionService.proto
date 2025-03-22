@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package org.example.ConnectionService;
+import "google/protobuf/timestamp.proto";
+
+option java_package = "org.example.ConnectionService";
+option java_multiple_files = true;
+
+service ConnectionService {
+    rpc GetGroupMessages (MessageRequest) returns (stream ResponseMessage);
+    rpc GetIndividualMessages (MessageRequest) returns (stream ResponseMessage);
+
+}
+
+message MessageRequest {
+    string chat_id = 1;
+}
+
+message ResponseMessage {
+    int64 sender_id = 1;
+    string chat_name = 2;
+    string message = 3;
+    bool seen = 4;
+    google.protobuf.Timestamp send_time = 5;
+}
+

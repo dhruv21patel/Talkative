@@ -1,0 +1,18 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: db-service-2-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: Mongo_chat  # Name of the DB service deployment
+  minReplicas: 1  # Minimum number of pods to run
+  maxReplicas: 3  # Maximum number of pods to scale to
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50  # Scale if CPU usage goes over 50%

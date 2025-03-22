@@ -1,23 +1,37 @@
 version: '3.8'
 services:
 
-  postgres:
-    container_name: postgres
+  postgres_indi:
+    container_name: postgres_indi
     build:
       context: ./Backend
       dockerfile : Dockerfile
     env_file:
       - ./.env
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "${POSTGRES_PORT_I:-5433}:5432"
     volumes:
-      - Postgres_Chat_data:/var/lib/postgresql/data  # Persistent volume
+      - Postgres_Chat_data_I:/var/lib/postgresql/data  # Persistent volume
+
+
+  postgres_group:
+    container_name: postgres_group
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    ports:
+      - "${POSTGRES_PORT_G:-5432}:5432"
+    volumes:
+      - Postgres_Chat_data_G:/var/lib/postgresql/data  # Persistent volume
 
   pgadmin:
     image: dpage/pgadmin4:7
     container_name: pgadmin
     depends_on:
-      - postgres
+      - postgres_group
+      - postgres_indi
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
@@ -42,7 +56,8 @@ services:
 
 volumes:
   Redis_Chat_data:
-  Postgres_Chat_data:
+  Postgres_Chat_data_I:
+  Postgres_Chat_data_G:
   MongoDb_Session_data:
   pgadmin_data:
 

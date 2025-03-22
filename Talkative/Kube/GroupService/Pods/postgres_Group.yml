@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-group
+  spec:
+    replicas: 2  # Number of pods to maintain (can increase later for scaling)
+    selector:
+      matchLabels:
+        app: postgres-group
+    template:
+      metadata:
+        labels:
+          app: postgres-group
+      spec:
+        containers:
+          - name: postgres
+            image: postgres:latest  # Replace with your Postgres image name
+            ports:
+              - containerPort: 5432  # Postgres default port
+            env:
+              - name: POSTGRES_USER
+                value: admin
+              - name: POSTGRES_PASSWORD
+                value: admin123
+              - name: POSTGRES_DB
+                value: chatdb
+          - name: pgadmin
+            image: dpage/pgadmin4:latest  # Replace with your pgAdmin image name
+            ports:
+              - containerPort: 80  # pgAdmin default port
+            env:
+              - name: PGADMIN_DEFAULT_EMAIL
+                value: admin@admin.com
+              - name: PGADMIN_DEFAULT_PASSWORD
+                value: admin123
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: postgres-group
+      labels:
+        app: postgres-group
+    spec:
+      selector:
+        app: postgres-group
+      ports:
+        - protocol: TCP
+          port: 5432
+          targetPort: 5432  # Match your Postgres container port
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: pgadmin
+      labels:
+        app: postgres-group
+    spec:
+      selector:
+        app: postgres-group
+      ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 80  # Match your pgAdmin container port
+    #     memory: "2Gi"
+    #     cpu: "1"
+
