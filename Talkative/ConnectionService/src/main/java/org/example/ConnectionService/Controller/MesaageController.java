@@ -3,6 +3,9 @@ package org.example.ConnectionService.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.protobuf.Timestamp;
 import org.example.ConnectionService.DTO.ResponseMessageDTO;
+import org.example.ConnectionService.Exception.UnknownRoom;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.example.ConnectionService.DTO.Messages;
 import org.example.ConnectionService.DTO.RequestConnection;
@@ -17,6 +20,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 
 
 @RestController
@@ -35,22 +39,44 @@ public class MesaageController {
     @Autowired
     SimpMessagingTemplate messagingTemplate;
 
-    @PostMapping("/{Roomid}")
-    public Mono<String> SendMessage(@PathVariable String Roomid , @RequestBody Messages messages)
-    {
-        RequestConnection request = RequestConnection.builder().sender_id(messages.getSender_id()).receiver_id(messages.getReceiver_id()).IsGroup(messages.getIsGroup()).Groupname(messages.getGroupname()).build();
-        return roomMapper.GenerateChatId(request).flatMap(Id -> {
-            messages.setChatid(Id);
-            try {
-                // Broadcast message to the specific room
-                messagingTemplate.convertAndSend("/topic/" + Roomid, messages.getMessage());
-                return messageService.SaveMessage(Id,messages);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        });
+   @PostMapping("/{Roomid}")
+public Mono<ResponseEntity<String>> SendMessage(@PathVariable String Roomid, @RequestBody Messages messages) {
+    RequestConnection request = RequestConnection.builder()
+            .sender_id(messages.getSender_id())
+            .receiver_id(messages.getReceiver_id())
+            .IsGroup(messages.getIsGroup())
+            .Groupname(messages.getGroupname())
+            .build();
 
-    }
+    return roomMapper.GenerateChatId(request)
+            .flatMap(Id -> {
+                // Set chat ID to message
+                messages.setChatid(Id);
+
+                // Validate Room ID
+                return roomMapper.getRoomid(Id)
+                        .flatMap(v -> {
+                            if (Objects.equals(v.getRoomid(), Roomid)) {
+                                // Proceed if Roomid is valid
+                                try {
+                                    // Broadcast the message to the specific room
+                                    messagingTemplate.convertAndSend("/topic/" + Roomid, messages.getMessage());
+                                    return messageService.SaveMessage(Id, messages)
+                                            .then(Mono.just(ResponseEntity.ok("Message Sent")));
+                                } catch (JsonProcessingException e) {
+                                    return Mono.error(new RuntimeException("Error broadcasting message", e));
+                                }
+                            } else {
+                                // Return error with custom status code if Roomid is invalid
+                                return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                        .body("Wrong Roomid"));
+                            }
+                        })
+                        .onErrorReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body("Unknown Room"));
+            });
+}
+
 
 
     @GetMapping("/{chatid}")

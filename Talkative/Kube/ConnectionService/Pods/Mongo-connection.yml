@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Mongo_chat
+spec:
+  replicas: 2  # Number of pods to maintain (can increase later for scaling)
+  selector:
+    matchLabels:
+      app: Mongo_chat
+  template:
+    metadata:
+      labels:
+        app: Mongo_chat
+    spec:
+      containers:
+        - name: Mongo_chat
+          image: mongo:latest  # Replace with your DB image name
+          ports:
+            - containerPort: 27017  # Replace with the correct DB port
+          # resources:
+          #   requests:
+          #     memory: "1Gi"
+          #     cpu: "500m"
+          #   limits:
+          #     memory: "2Gi"
+          #     cpu: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: Mongo_chat
+  labels:
+    app: Mongo_chat
+spec:
+  selector:
+    app: Mongo_chat
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017  # Match your DB container port

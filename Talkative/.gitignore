@@ -31,6 +31,9 @@ package.json
 /Databases/
 /REDIS/
 
+## kubernets scaling
+/Kube/**/Node
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

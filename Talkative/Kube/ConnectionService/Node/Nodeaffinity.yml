@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: connection-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: connection-service
+  template:
+    metadata:
+      labels:
+        app: connection-service
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - node-name  # Specify the name of the node
+      containers:
+        - name: connection-service
+          image: connection-service:latest
+          ports:
+            - containerPort: 8080
